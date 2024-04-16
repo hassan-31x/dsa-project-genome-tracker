@@ -49,3 +49,14 @@ trie = {
         },
     }
 }
+
+def insert(trie, word):
+    if not word:
+        trie['is_end'] = True
+        return trie
+        
+    if word[0] not in trie:
+        trie[word[0]] = {}
+
+    trie[word[0]] = insert(trie[word[0]], word[1:])
+    return trie
