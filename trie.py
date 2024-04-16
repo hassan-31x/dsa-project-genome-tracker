@@ -1,6 +1,3 @@
-words = ["ant", "alligator", "almond", "bear", "bee", "butterfly", "ball", "bat", "cat", "dog", "duck", "elephant", "egg", "fish", "frog", "giraffe", "gorilla", "hippo", "horse", "iguana", "jellyfish", "kangaroo", "lion", "monkey", "mouse", "owl", "penguin", "quail", "rabbit", "snake", "tiger", "turtle", "unicorn", "vulture", "walrus", "zebra"]
-
-
 sample = ["macao", "macaroni", "macaroon", "machinable", "machine", "macro", "macroscopic"]
 trie = {
     'm': {
@@ -134,4 +131,3 @@ def delete(trie, word):
         del trie[word[0]]
 
     return trie
-
