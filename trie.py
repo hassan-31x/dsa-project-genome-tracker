@@ -105,7 +105,7 @@ def dfs(node, prefixes, words):
             dfs(child, prefixes + char, words)
 
 
-def findWordsWithPrefix(trie, prefix):
+def prefixWords(trie, prefix):
     node = trie
     for char in prefix:
         if char not in node:
