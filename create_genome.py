@@ -1,6 +1,6 @@
 import random
 
-def generate_genome_structure(length_range=(4, 20), num_structures=10000):
+def generate_genome_structure(length_range=(4, 20), num_structures=100):
     genome_structures = []
     nucleotides = ['A', 'C', 'G', 'T']
 

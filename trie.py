@@ -72,6 +72,17 @@ def insert(trie, word):
     return trie
 
 
+def createTrie(filename):
+    trie = {}
+
+    with open(filename, 'r') as file:
+        for line in file:
+            word = line.strip()
+            trie = insert(trie, word)
+
+    return trie
+
+
 def isPresent(trie, word):
     if not word:
         if 'is_end' in trie:
