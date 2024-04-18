@@ -2,22 +2,20 @@ from trie import *
 
 def main():
     print('Genome structures loaded into trie:')
-    file = 'genome_structures.txt'
-    trie = createTrie(file)
+    prefixTrie = createTrie('genomes.txt', 'prefix')
+    suffixTrie = createTrie('genomes.txt', 'suffix')
 
-    print('Genome structures with prefix "AA":', prefixWords(trie, 'AA'))
-    print('Genome structures with prefix "AC":', prefixWords(trie, 'AC'))
+    print('Genome structures with prefix "AA":')
+    print(prefixWords(prefixTrie, 'AA', trieType='prefix'))
+    print(prefixWords(suffixTrie, 'AA', trieType='suffix'))
 
-    print('Is "ACGGTA" present in the trie?', isPresent(trie, 'ACGGTA'))
-    insert(trie, 'ACGGTA')
-    print('Is "ACGGTA" present in the trie after Inserting?', isPresent(trie, 'ACGGTA'))
+    print('Is "CCGAGATGTAGCATAC" present in the trie?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+    insert(prefixTrie, 'CCGAGATGTAGCATAC')
+    print('Is "CCGAGATGTAGCATAC" present in the trie after Inserting?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
 
-    print('Total number of genome structures:', countWords(trie))
-
-    if 'ATTGACTCGC' in trie:
-        print('Removing "ATTGACTCGC" from the trie')
-        delete(trie, 'ATTGACTCGC')
-        print('Is "ATTGACTCGC" present in the trie after deleting?', isPresent(trie, 'ATTGACTCGC'))
-
-
+    if isPresent(prefixTrie, 'CCGAGATGTAGCATAC'):
+        print('Removing "CCGAGATGTAGCATAC" from the trie')
+        delete(prefixTrie, 'CCGAGATGTAGCATAC')
+        print('Is "CCGAGATGTAGCATAC" present in the trie after deleting?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+    
 main()

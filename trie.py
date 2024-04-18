@@ -1,67 +1,5 @@
-sample = ["macao", "macaroni", "macaroon", "machinable", "machine", "macro", "macroscopic"]
-trie = {
-    'm': {
-        'a': {
-            'c': {
-                'a': {
-                    'o': {
-                        'is_end': True
-                    },
-                    'r': {
-                        'o': {
-                            'n': {
-                                'i': {
-                                    'is_end': True
-                                }
-                            }
-                        }
-                    }
-                },
-                'h': {
-                    'i': {
-                        'n': {
-                            'a': {
-                                'b': {
-                                    'l': {
-                                        'e': {
-                                            'is_end': True
-                                        }
-                                    }
-                                },
-                            },
-                            'e': {
-                                    'is_end': True
-                                }
-                        }
-                    }
-                },
-                    'r': {
-                        'o': {
-                            'is_end': True,
-                            's': {
-                                'c': {
-                                    'o': {
-                                        'p': {
-                                            'i': {
-                                                'c': {
-                                                    'is_end': True
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            
-                            }
-                        }
-                    }
-            }
-        },
-    }
-}
-
-
 def insert(trie, word):
-    if not word:
+    if word == '':
         trie['is_end'] = True
         return trie
         
@@ -72,19 +10,22 @@ def insert(trie, word):
     return trie
 
 
-def createTrie(filename):
+def createTrie(filename, trieType='prefix'):
     trie = {}
 
     with open(filename, 'r') as file:
         for line in file:
             word = line.strip()
-            trie = insert(trie, word)
+            if trieType == 'prefix':
+                trie = insert(trie, word)
+            elif trieType == 'suffix':
+                trie = insert(trie, word[::-1])
 
     return trie
 
 
 def isPresent(trie, word):
-    if not word:
+    if word == '':
         if 'is_end' in trie:
             return True
         else:
@@ -96,40 +37,40 @@ def isPresent(trie, word):
     return isPresent(trie[word[0]], word[1:])
 
 
-def dfs(node, prefixes, words):
+def helperPrefix(node, prefixes, words, trieType='prefix'):
     if 'is_end' in node:
-        words.append(prefixes)
+        if trieType == 'prefix':
+            words.append(prefixes)
+        else:
+            words.append(prefixes[::-1])
         
-    for char, child in node.items():
-        if char != 'is_end':
-            dfs(child, prefixes + char, words)
+    for childKey, childDictionary in node.items():
+        if childKey != 'is_end':
+            helperPrefix(childDictionary, prefixes + childKey, words, trieType)
 
 
-def prefixWords(trie, prefix):
-    node = trie
+def prefixWords(trie, prefix, trieType='prefix'):
+    trieCopy = trie
     for char in prefix:
-        if char not in node:
-            # Prefix not found in the trie, return an empty list
+        if char not in trieCopy:
             return []
-        node = node[char]
+        trieCopy = trieCopy[char]
 
     words = []
-
-    dfs(node, prefix, words)
+    helperPrefix(trieCopy, prefix, words, trieType)
     return words
 
 
 def getAllWords(trie):
-    words = []
-    dfs(trie, "", words)
-    return words
+    return prefixWords(trie, "")
 
 
 def countWords(trie):
     return len(getAllWords(trie))
 
+
 def delete(trie, word):
-    if not word:
+    if word == '':
         if 'is_end' in trie:
             del trie['is_end']
         return trie
@@ -137,8 +78,6 @@ def delete(trie, word):
     if word[0] not in trie:
         return trie
 
-    trie[word[0]] = delete(trie.get(word[0], {}), word[1:])  # Use dict.get() to handle missing keys
-    if not trie[word[0]]:
-        del trie[word[0]]
+    trie[word[0]] = delete(trie.get(word[0], {}), word[1:])
 
     return trie
