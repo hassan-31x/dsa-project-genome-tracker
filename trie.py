@@ -1,14 +1,13 @@
-def insert(trie, word):
-    if word == '':
+def insert(trie,word):
+    if word == "" :
         trie['is_end'] = True
-        # print('inserted')
-        return trie
-        
-    if word[0] not in trie:
-        trie[word[0]] = {}
-
-    trie[word[0]] = insert(trie[word[0]], word[1:])
-    return trie
+        return
+    letter = word[0]
+    if letter in trie:
+        insert(trie[letter],word[1:])
+    else:
+        trie[letter] = {}
+        insert(trie[letter],word[1:])
 
 
 def insertPermenant(word):
@@ -16,7 +15,6 @@ def insertPermenant(word):
     f.write(word + "\n")
     f.close()
 
-insertPermenant('abs')
 
 def createTrie(filename, trieType='prefix'):
     trie = {}
@@ -29,17 +27,18 @@ def createTrie(filename, trieType='prefix'):
             insert(trie,word)
     return trie
 
-def isPresent(trie, word):
-    if word == '':
-        if 'is_end' in trie:
-            return True
-        else:
-            return False
 
-    if word[0] not in trie:
+def isPresent(trie,word):
+    
+    if word == "" and "is_end" in trie and trie["is_end"] == True: 
+        return True
+    elif  word == "" and "is_end" not in trie:
         return False
-
-    return isPresent(trie[word[0]], word[1:])
+    letter = word[0]
+    if letter in trie: 
+        return isPresent(trie[letter],word[1:])
+    else:
+        return False
 
 
 def helperPrefix(node, prefixes, words, trieType='prefix'):
