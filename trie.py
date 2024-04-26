@@ -88,9 +88,6 @@ def delete(trie, word):
 
     trie[word[0]] = delete(trie.get(word[0], {}), word[1:])
     
-    if not trie[word[0]] and len(trie)>1:
-        del trie[word[0]]
-    
     return trie
 
 
