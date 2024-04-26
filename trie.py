@@ -1,4 +1,9 @@
 def insert(trie,word):
+    for i in word:
+        if i not in ['A', 'C', 'G', 'T']:
+            print('Invalid Genome Structure')
+            return
+    
     if word == "" :
         trie['is_end'] = True
         return
@@ -11,6 +16,11 @@ def insert(trie,word):
 
 
 def insertPermenant(word):
+    for i in word:
+        if i not in ['A', 'C', 'G', 'T']:
+            print('Invalid Genome Structure')
+            return
+    
     f = open("genomes.txt", "a")
     f.write(word + "\n")
     f.close()
