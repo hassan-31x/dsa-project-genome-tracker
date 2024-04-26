@@ -92,3 +92,12 @@ def delete(trie, word):
         del trie[word[0]]
     
     return trie
+
+
+def deletePermenant(word):
+    with open("genomes.txt", "r") as file:
+        lines = file.readlines()
+    with open("genomes.txt", "w") as file:
+        for line in lines:
+            if line.strip("\n") != word:
+                file.write(line)

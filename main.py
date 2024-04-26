@@ -16,18 +16,29 @@ def main():
     sl.subheader('Manage Genome Structures Effectively')
 
     i = st_keyup('Enter Genome to Search', key='0')
-    # i = sl.text_input('Enter Genome to Search')
 
     if i:
         p = prefixWords(prefixTrie, i, trieType='prefix')
         s = prefixWords(suffixTrie, i, trieType='suffix')
 
         for word in p:
-            sl.markdown(f':red[{i}]{word[len(i):]}')
+            col1, col2 = sl.columns([6, 1])
+            col1.markdown(f':red[{i}]{word[len(i):]}')
+            if col2.button('Delete', key=word+str(len(i)), type='primary'):
+                deletePermenant(word)
+                sl.success(f'Deleted {word} from the Database')
+                prefixTrie = createTrie('genomes.txt', 'prefix')
+                suffixTrie = createTrie('genomes.txt', 'suffix')
         for word in s:
             if word in p:
                 continue
-            sl.markdown(f'{word[:len(word)-len(i)]}:red[{i}]')
+            col1, col2 = sl.columns([6, 1])
+            col1.markdown(f'{word[:len(word)-len(i)]}:red[{i}]')
+            if col2.button('Delete', key=word+str(len(i)), type='primary'):
+                deletePermenant(word)
+                sl.success(f'Deleted {word} from the Database')
+                prefixTrie = createTrie('genomes.txt', 'prefix')
+                suffixTrie = createTrie('genomes.txt', 'suffix')
         
         if not p and not s:
             sl.warning('No Results Found')

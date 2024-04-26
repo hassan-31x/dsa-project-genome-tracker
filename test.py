@@ -9,20 +9,17 @@ def main():
     print(prefixWords(prefixTrie, 'AA', trieType='prefix'))
     print(prefixWords(suffixTrie, 'AA', trieType='suffix'))
 
-    # print(prefixTrie)
-    # print('s => ', suffixTrie)
-
     print('Is "CCGAGATGTAGCATAC" present in the trie?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
     insert(prefixTrie, 'CCGAGATGTAGCATAC')
     print('Is "CCGAGATGTAGCATAC" present in the trie after Inserting?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
 
-    # if isPresent(prefixTrie, 'CCGAGATGTAGCATAC'):
-    #     print('Removing "CCGAGATGTAGCATAC" from the trie')
-    #     delete(prefixTrie, 'CCGAGATGTAGCATAC')
-    #     print('Is "CCGAGATGTAGCATAC" present in the trie after deleting?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+    if isPresent(prefixTrie, 'CCGAGATGTAGCATAC'):
+        print('Removing "CCGAGATGTAGCATAC" from the trie')
+        delete(prefixTrie, 'CCGAGATGTAGCATAC')
+        print('Is "CCGAGATGTAGCATAC" present in the trie after deleting?', isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
 
-    # print(isPresent(prefixTrie, 'CGTGTACGGAAATAACAT'))
-    # delete(prefixTrie, 'CGTGTACGGAAATAACAT')
-    # print(isPresent(prefixTrie, 'CGTGTACGGAAATAACAT'))
+    print(isPresent(prefixTrie, 'CGTGTACGGAAATAACAT'))
+    delete(prefixTrie, 'CGTGTACGGAAATAACAT')
+    print(isPresent(prefixTrie, 'CGTGTACGGAAATAACAT'))
     
 main()
