@@ -11,6 +11,13 @@ def insert(trie, word):
     return trie
 
 
+def insertPermenant(word):
+    f = open("genomes.txt", "a")
+    f.write(word + "\n")
+    f.close()
+
+insertPermenant('abs')
+
 def createTrie(filename, trieType='prefix'):
     trie = {}
 
@@ -51,7 +58,7 @@ def prefixWords(trie, prefix, trieType='prefix'):
     trieCopy = trie
     if trieType == 'suffix':
         prefix = prefix[::-1]
-        
+
     for char in prefix:
         if char not in trieCopy:
             return []

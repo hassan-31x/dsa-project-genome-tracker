@@ -1,20 +1,22 @@
 import streamlit as sl
+from st_keyup import st_keyup
 from trie import *
 
+def validate(genome):
+    for i in genome:
+        if i not in ['A', 'C', 'G', 'T']:
+            return False
+    return True
 
-def handleAdd(prefixTrie, suffixTrie, i):
-    prefixTrie = insert(prefixTrie, i)
-    suffixTrie = insert(suffixTrie, i[::-1])
-    print(i)
-    sl.success(f'Added {i} to the Database')
-
-    return prefixTrie, suffixTrie
-
-def showSearch(prefixTrie, suffixTrie):
+def main():
+    prefixTrie = createTrie('genomes.txt', 'prefix')
+    suffixTrie = createTrie('genomes.txt', 'suffix')
+    
     sl.header('Geno Search')
     sl.subheader('Manage Genome Structures Effectively')
 
-    i = sl.text_input('Enter Genome to Search')
+    i = st_keyup('Enter Genome to Search', key='0')
+    # i = sl.text_input('Enter Genome to Search')
 
     if i:
         p = prefixWords(prefixTrie, i, trieType='prefix')
@@ -23,39 +25,20 @@ def showSearch(prefixTrie, suffixTrie):
         for word in p:
             sl.markdown(f':red[{i}]{word[len(i):]}')
         for word in s:
+            if word in p:
+                continue
             sl.markdown(f'{word[:len(word)-len(i)]}:red[{i}]')
         
         if not p and not s:
             sl.warning('No Results Found')
             if sl.button('Add to Database'):
-                print(isPresent(prefixTrie, i))
-                prefixTree = insert(prefixTrie, i)
-                suffixTrie = insert(suffixTrie, i[::-1])
-                sl.success(f'Added {i} to the Database')
-                print(isPresent(prefixTrie, i))
+                if validate(i):
+                    insertPermenant(i)
+                    prefixTrie = createTrie('genomes.txt', 'prefix')
+                    suffixTrie = createTrie('genomes.txt', 'suffix')
 
-                # print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
-                # t = insert(prefixTrie, 'CCGAGATGTAGCATAC')
-                # print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+                    sl.success(f'Added {i} to the Database')
+                else:
+                    sl.error('Invalid Genome Structure')
 
-def add():
-    # if sl.button('Add to Database'):
-    pass
-    #     insert(prefixTrie, i)
-    #     insert(suffixTrie, i[::-1])
-    #     sl.success(f'Added {i} to the Database')
-
-    #     print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
-    #     t = insert(prefixTrie, 'CCGAGATGTAGCATAC')
-    #     print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
-
-def main():
-    prefixTrie = createTrie('genomes.txt', 'prefix')
-    suffixTrie = createTrie('genomes.txt', 'suffix')
-    showSearch(prefixTrie, suffixTrie)
-    sl.markdown('---')
-    add()
-
-
-        
 main()
