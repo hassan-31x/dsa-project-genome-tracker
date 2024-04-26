@@ -1,7 +1,7 @@
 def insert(trie, word):
     if word == '':
         trie['is_end'] = True
-        print('inserted')
+        # print('inserted')
         return trie
         
     if word[0] not in trie:
@@ -17,13 +17,10 @@ def createTrie(filename, trieType='prefix'):
     with open(filename, 'r') as file:
         for line in file:
             word = line.strip()
-            if trieType == 'prefix':
-                trie = insert(trie, word)
-            elif trieType == 'suffix':
-                trie = insert(trie, word[::-1])
-
+            if trieType == 'suffix':
+                word=word[::-1]
+            insert(trie,word)
     return trie
-
 
 def isPresent(trie, word):
     if word == '':
@@ -42,7 +39,7 @@ def helperPrefix(node, prefixes, words, trieType='prefix'):
     if 'is_end' in node:
         if trieType == 'prefix':
             words.append(prefixes)
-
+        else:
             words.append(prefixes[::-1])
         
     for childKey, childDictionary in node.items():
@@ -52,6 +49,9 @@ def helperPrefix(node, prefixes, words, trieType='prefix'):
 
 def prefixWords(trie, prefix, trieType='prefix'):
     trieCopy = trie
+    if trieType == 'suffix':
+        prefix = prefix[::-1]
+        
     for char in prefix:
         if char not in trieCopy:
             return []
@@ -71,14 +71,18 @@ def countWords(trie):
 
 
 def delete(trie, word):
-    if word == '':
+    if not word:
         if 'is_end' in trie:
-            del trie['is_end']
+            if len(trie)==1:
+                del trie['is_end']
         return trie
 
     if word[0] not in trie:
         return trie
 
     trie[word[0]] = delete(trie.get(word[0], {}), word[1:])
-
+    
+    if not trie[word[0]] and len(trie)>1:
+        del trie[word[0]]
+    
     return trie
