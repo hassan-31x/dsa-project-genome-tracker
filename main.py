@@ -1,66 +1,61 @@
-import tkinter as tk
-from tkinter import ttk
-from tkhtmlview import HTMLLabel
-from trie import createTrie, prefixWords
-
-# Function to handle the search button click
-def search():
-    input_text = entry.get()
-    words = prefixWords(trie, input_text)
-    html = ''
-    for i, word in enumerate(words):
-        html += f'<p style="padding: 0"><span style="color: red; padding: 0;">{input_text}</span>{word[len(input_text):]}</p>'
-
-    clear_result()
-    
-    global result_label
-    result_label = HTMLLabel(main_frame, html=html, font=("Helvetica", 12), background="white", padx=10, pady=10)
-    result_label.pack(padx=10, fill="both", expand=True)
-
-def clear_result():
-    global result_label
-    if result_label:
-        result_label.pack_forget()
-        result_label.destroy()
+import streamlit as sl
+from trie import *
 
 
-# Function to handle the start button click
-def start():
-    intro_frame.pack_forget()
-    main_frame.pack()
+def handleAdd(prefixTrie, suffixTrie, i):
+    prefixTrie = insert(prefixTrie, i)
+    suffixTrie = insert(suffixTrie, i[::-1])
+    print(i)
+    sl.success(f'Added {i} to the Database')
 
-# Creating the trie from a file
-trie = createTrie("genomes.txt")
+    return prefixTrie, suffixTrie
 
-# Creating the UI
-root = tk.Tk()
-root.title("Genome Sequence Search")
-root.geometry("1000x600")
+def showSearch(prefixTrie, suffixTrie):
+    sl.header('Geno Search')
+    sl.subheader('Manage Genome Structures Effectively')
 
-# Introduction screen
-intro_frame = tk.Frame(root)
-intro_frame.pack(padx=20, pady=20)
+    i = sl.text_input('Enter Genome to Search')
 
-intro_label = tk.Label(intro_frame, text="Welcome to Genome Sequence Search!", font=("Helvetica", 18))
-intro_label.pack(pady=20)
+    if i:
+        p = prefixWords(prefixTrie, i, trieType='prefix')
+        s = prefixWords(suffixTrie, i, trieType='suffix')
 
-start_button = ttk.Button(intro_frame, text="Start", command=start)
-start_button.pack()
+        for word in p:
+            sl.markdown(f':red[{i}]{word[len(i):]}')
+        for word in s:
+            sl.markdown(f'{word[:len(word)-len(i)]}:red[{i}]')
+        
+        if not p and not s:
+            sl.warning('No Results Found')
+            if sl.button('Add to Database'):
+                print(isPresent(prefixTrie, i))
+                prefixTree = insert(prefixTrie, i)
+                suffixTrie = insert(suffixTrie, i[::-1])
+                sl.success(f'Added {i} to the Database')
+                print(isPresent(prefixTrie, i))
 
-# Main screen
-main_frame = tk.Frame(root)
+                # print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+                # t = insert(prefixTrie, 'CCGAGATGTAGCATAC')
+                # print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
 
-# Input field
-entry = ttk.Entry(main_frame, width=50, font=("Helvetica", 12))
-entry.pack(padx=10, pady=10)
+def add():
+    # if sl.button('Add to Database'):
+    pass
+    #     insert(prefixTrie, i)
+    #     insert(suffixTrie, i[::-1])
+    #     sl.success(f'Added {i} to the Database')
 
-# Search button
-search_button = ttk.Button(main_frame, text="Search", command=search)
-search_button.pack(padx=10, pady=10)
+    #     print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
+    #     t = insert(prefixTrie, 'CCGAGATGTAGCATAC')
+    #     print(isPresent(prefixTrie, 'CCGAGATGTAGCATAC'))
 
-result_label = None
+def main():
+    prefixTrie = createTrie('genomes.txt', 'prefix')
+    suffixTrie = createTrie('genomes.txt', 'suffix')
+    showSearch(prefixTrie, suffixTrie)
+    sl.markdown('---')
+    add()
 
-# Packing main frame initially hidden
-main_frame.pack_forget()
 
-root.mainloop()
+        
+main()

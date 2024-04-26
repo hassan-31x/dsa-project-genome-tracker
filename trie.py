@@ -1,6 +1,7 @@
 def insert(trie, word):
     if word == '':
         trie['is_end'] = True
+        print('inserted')
         return trie
         
     if word[0] not in trie:
@@ -41,7 +42,7 @@ def helperPrefix(node, prefixes, words, trieType='prefix'):
     if 'is_end' in node:
         if trieType == 'prefix':
             words.append(prefixes)
-        else:
+
             words.append(prefixes[::-1])
         
     for childKey, childDictionary in node.items():
