@@ -87,16 +87,15 @@ def countWords(trie):
 
 
 def delete(trie, word):
-    if not word:
+    if word == "":
         if 'is_end' in trie:
-            if len(trie)==1:
-                del trie['is_end']
+            del trie['is_end']
         return trie
 
     if word[0] not in trie:
         return trie
 
-    trie[word[0]] = delete(trie.get(word[0], {}), word[1:])
+    trie[word[0]] = delete(trie[word[0]], word[1:])
     
     return trie
 

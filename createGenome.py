@@ -1,6 +1,6 @@
 import random
 
-def generateGenomes(mini=16, maxi=24, total=100):
+def generateGenomes(mini=16, maxi=24, total=1000):
     genomes = []
     nucleotides = ['A', 'C', 'G', 'T']
 
